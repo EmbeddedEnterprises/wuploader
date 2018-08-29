@@ -1,0 +1,23 @@
+name: wuploader
+version: 0.1.0
+description: 'wuploader is a file upload utility library for WAMP '
+authors:
+- Martin Koppehel
+license: ""
+package:
+  include: []
+args:
+  run: ""
+  go:
+    test: ""
+    build: ""
+    doc: ""
+    vet: ""
+    fmt: -s
+  glide:
+    install: ""
+    update: ""
+    get: ""
+  git:
+    tag: -s -m 'Update version'
+    clone: ""

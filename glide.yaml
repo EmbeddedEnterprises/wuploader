@@ -1,0 +1,4 @@
+package: github.com/EmbeddedEnterprises/wuploader
+import:
+- package: github.com/EmbeddedEnterprises/service
+  version: ^0.14.0
