@@ -61,7 +61,10 @@ func (u *uploaderImpl) Add(endpoint string, begin UploadChecker, handler UploadH
 				return returnError(wamp.ErrInvalidArgument)
 			}
 			uploadSize, ok := wamp.AsInt64(args[1])
-			if !ok || uploadSize <= 0 {
+			// Files of length 0 will be considered empty files, so allow them being uploaded.
+			// For files of zero length, we don't need to initialize any storage
+			// Since in go 'nil' is considered equal a zero-length array
+			if !ok || uploadSize < 0 {
 				return returnError(wamp.ErrInvalidArgument)
 			}
 			if begin != nil {
