@@ -112,14 +112,14 @@ func (u *uploaderImpl) Add(endpoint string, begin UploadChecker, handler UploadH
 			}
 			u.lock.Lock()
 			txnObj, ok := u.txns[txn]
+			delete(u.txns, txn)
+			u.lock.Unlock()
 			if !ok {
 				return returnError("com.robulab.no-such-upload", txn)
 			}
 			if txnObj.pos != txnObj.size || txnObj.pos != uint64(len(txnObj.buf)) {
 				return returnError("com.robulab.invalid-upload-size")
 			}
-			delete(u.txns, txn)
-			u.lock.Unlock()
 			return handler(ctx, txnObj.buf, args[2:], kwargs, details)
 		}
 		return &client.InvokeResult{
@@ -145,5 +145,6 @@ func NewUploader(c *client.Client) (Uploader, error) {
 	return &uploaderImpl{
 		client: c,
 		txns:   map[wamp.ID]*uploadTxn{},
+		lock:   sync.RWMutex{},
 	}, nil
 }
