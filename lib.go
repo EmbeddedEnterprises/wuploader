@@ -74,12 +74,12 @@ func (u *uploaderImpl) Add(endpoint string, begin UploadChecker, handler UploadH
 			}
 			id := wamp.GlobalID()
 			u.lock.Lock()
+			defer u.lock.Unlock()
 			u.txns[id] = &uploadTxn{
-				buf:  nil,
+				buf:  make([]byte, 0, uploadSize),
 				pos:  0,
 				size: uint64(uploadSize),
 			}
-			u.lock.Unlock()
 			return returnResult(id)
 		case "data":
 			if len(args) < 3 {
